@@ -509,22 +509,34 @@
             return ins 
         end
 
-        function library:unload_menu() 
+        function library:unload_menu() --W deepseek code
             if library.gui then 
                 library.gui:Destroy()
             end
             
             for index, connection in next, library.connections do 
-                connection:Disconnect() 
-                connection = nil 
-            end     
-
+                pcall(function() connection:Disconnect() end)
+                library.connections[index] = nil
+            end
+            
+            library.connections = nil
+            
             if library.sgui then 
                 library.sgui:Destroy()
-            end 
+            end
+            
+            library.flags = nil
+            library.config_flags = nil
+            
+            if library.watermark_outline then
+                library.watermark_outline:Destroy()
+            end
+            
+            task.wait()
+            collectgarbage()
             
             library = nil 
-        end 
+        end
     --
     
     -- Library element functions
@@ -2544,40 +2556,49 @@
                 end, color = themes.preset["3"]})
 
                 local section = main:column({}):section({name = "Ui", size = 1, default = true})
-                local menu_visible = true -- Estado inicial
+                    local menu_visible = true
+                    local menu_fixed = false 
+
                     section:keybind({
                         name = "Menu Visibility",
-                        default = Enum.KeyCode.RightShift,
+                        default = false,
                         callback = function()
-                            menu_visible = not menu_visible
-                            
-                            if library.gui then
-                                library.gui.Enabled = menu_visible
+                            if not menu_fixed then
+                                menu_visible = not menu_visible
+                                
+                                if library.gui then
+                                    library.gui.Enabled = menu_visible
+                                end
                             end
-                            
-                            notifications:create_notification({
-                                name = "Menu " .. (menu_visible and "Visible" or "Hidden")
-                            })
                         end
                     })
-                section:button({
-                    name = "Unload Menu",
-                    callback = function()
-                        notifications:create_notification({name = "1"})
-                        wait(1)
-                        notifications:create_notification({name = "2"})
-                        wait(1)
-                        notifications:create_notification({name = "3"})
-                        wait(1)
-                        notifications:create_notification({name = "4"})
-                        
-                        task.wait(4)
-                        library:unload_menu()
-                    end
-                })
 
-                main:column({})
-            end
+                    section:button({
+                        name = "Fix Menu (Always Visible)",
+                        callback = function()
+                            menu_fixed = not menu_fixed
+                            
+                            if menu_fixed then
+                                if library.gui then
+                                    library.gui.Enabled = true
+                                    menu_visible = true
+                                end
+                                section.fix_button.Text = "Unfix Menu"
+                            else
+                                if library.gui then
+                                    library.gui.Enabled = menu_visible
+                                end
+                                section.fix_button.Text = "Fix Menu"
+                            end
+                        end
+                    })
+
+                    section:button({
+                        name = "Unload Menu",
+                        callback = function()
+                            library:unload_menu()
+                        end
+                    })
         -- 
     -- 
 -- 
