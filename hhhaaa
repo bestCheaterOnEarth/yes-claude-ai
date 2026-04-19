@@ -2544,20 +2544,22 @@
                 end, color = themes.preset["3"]})
 
                 local section = main:column({}):section({name = "Ui", size = 1, default = true})
-                section:keybind({name = "Menu bind", callback = function(bool) window.toggle_menu(bool) end, default = true})
-                section:keybind({
-                        name = "Menu bind",
-                        default = true,
-                        callback = function(state)
+                local menu_visible = true -- Estado inicial
+                    section:keybind({
+                        name = "Menu Visibility",
+                        default = Enum.KeyCode.RightShift,
+                        callback = function()
+                            menu_visible = not menu_visible
+                            
                             if library.gui then
-                                library.gui.Enabled = state
+                                library.gui.Enabled = menu_visible
                             end
                             
                             notifications:create_notification({
-                                name = state and "Menu Enabled" or "Menu Hidden"
+                                name = "Menu " .. (menu_visible and "Visible" or "Hidden")
                             })
                         end
-                    }) 
+                    })
                 section:button({
                     name = "Unload Menu",
                     callback = function()
@@ -2569,7 +2571,7 @@
                         wait(1)
                         notifications:create_notification({name = "4"})
                         
-                        task.wait(5)
+                        task.wait(4)
                         library:unload_menu()
                     end
                 })
