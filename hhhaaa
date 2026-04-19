@@ -2557,7 +2557,7 @@
                 
                 section:keybind({name = "Menu bind", 
                     callback = function(bool) 
-                        window.toggle_menu(bool) 
+                        cfg.toggle_menu(bool) 
                     end, 
                     default = true
                 })
