@@ -524,6 +524,9 @@
         function library:window(properties)
             local cfg = {
                 name = properties.name or properties.Name or "priv9",
+                -- ✅ ALTERAÇÃO 1: accent_name permite definir o titulo com RichText
+                -- formato: { "Priv", "9" } onde o segundo trecho fica azul
+                accent_name = properties.accent_name or nil,
                 size = properties.size or properties.Size or dim2(0, 600, 0, 400), 
                 selected_tab 
             }
@@ -550,6 +553,27 @@
 
                 library:resizify(window_outline)
                 library:draggify(window_outline)
+
+                -- ✅ ALTERAÇÃO 2: tab_button_holder movido para o TOPO (abaixo do title_holder)
+                local tab_button_holder = library:create("Frame", {
+                    Parent = window_outline;
+                    BackgroundTransparency = 0.800000011920929;
+                    Position = dim2(0, 2, 0, 24); -- logo abaixo do título
+                    BorderColor3 = rgb(0, 0, 0);
+                    Size = dim2(1, -4, 0, 20);
+                    BorderSizePixel = 0;
+                    BackgroundColor3 = rgb(0, 0, 0)
+                }); cfg.tab_button_holder = tab_button_holder
+                
+                library:create("UIListLayout", {
+                    VerticalAlignment = Enum.VerticalAlignment.Center;
+                    FillDirection = Enum.FillDirection.Horizontal;
+                    HorizontalAlignment = Enum.HorizontalAlignment.Center;
+                    HorizontalFlex = Enum.UIFlexAlignment.Fill;
+                    Parent = tab_button_holder;
+                    SortOrder = Enum.SortOrder.LayoutOrder;
+                    VerticalFlex = Enum.UIFlexAlignment.Fill
+                });
                 
                 local title_holder = library:create("Frame", {
                     Parent = window_outline;
@@ -560,12 +584,26 @@
                     BorderSizePixel = 0;
                     BackgroundColor3 = rgb(0, 0, 0)
                 });
-                
+
+                -- ✅ ALTERAÇÃO 1 (continuação): título com RichText accent
+                -- Se accent_name for fornecido, usa RichText p/ colorir parte do nome
+                local title_text
+                if cfg.accent_name then
+                    -- accent_name = { first = "Priv", second = "9", color = "#245771" }
+                    local first = cfg.accent_name.first or ""
+                    local second = cfg.accent_name.second or ""
+                    local accent_color = cfg.accent_name.color or "#4499CC"
+                    title_text = string.format('%s<font color="%s">%s</font>', first, accent_color, second)
+                else
+                    title_text = cfg.name
+                end
+
                 local ui_title = library:create("TextLabel", {
                     FontFace = fonts["TahomaBold"];
                     TextColor3 = rgb(255, 255, 255);
                     BorderColor3 = rgb(0, 0, 0);
-                    Text = cfg.name;
+                    Text = title_text;
+                    RichText = true; -- ✅ necessário para o accent funcionar
                     Parent = title_holder;
                     BackgroundTransparency = 1;
                     Size = dim2(1, 0, 1, 0);
@@ -581,27 +619,6 @@
                         rgbkey(1, themes.preset["3"]),
                     };
                     Parent = window_outline
-                });
-                
-                local tab_button_holder = library:create("Frame", {
-                    AnchorPoint = vec2(0, 1);
-                    Parent = window_outline;
-                    BackgroundTransparency = 0.800000011920929;
-                    Position = dim2(0, 2, 1, -2);
-                    BorderColor3 = rgb(0, 0, 0);
-                    Size = dim2(1, -4, 0, 20);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = rgb(0, 0, 0)
-                }); cfg.tab_button_holder = tab_button_holder
-                
-                library:create("UIListLayout", {
-                    VerticalAlignment = Enum.VerticalAlignment.Center;
-                    FillDirection = Enum.FillDirection.Horizontal;
-                    HorizontalAlignment = Enum.HorizontalAlignment.Center;
-                    HorizontalFlex = Enum.UIFlexAlignment.Fill;
-                    Parent = tab_button_holder;
-                    SortOrder = Enum.SortOrder.LayoutOrder;
-                    VerticalFlex = Enum.UIFlexAlignment.Fill
                 });
             --
 
@@ -635,12 +652,14 @@
                 -- 
 
                 -- Page
+                    -- ✅ ALTERAÇÃO 3: Page começa mais abaixo (0, 46 em vez de 0, 24)
+                    -- para dar espaço às tabs no topo + title (2+20+2+20+2 = 46)
                     local Page = library:create("Frame", {
                         Parent = self.main_outline;
                         BackgroundTransparency = 0.6;
-                        Position = dim2(0, 2, 0, 24);
+                        Position = dim2(0, 2, 0, 46); -- ✅ empurrado para baixo
                         BorderColor3 = rgb(0, 0, 0);
-                        Size = dim2(1, -4, 1, -48);
+                        Size = dim2(1, -4, 1, -48); -- ✅ altura ajustada
                         BorderSizePixel = 0;
                         BackgroundColor3 = rgb(0, 0, 0),
                         Visible = false,
@@ -737,7 +756,8 @@
             -- Instances
                 local outline = library:create("Frame", {
                     Parent = library.sgui;
-                    Position = dim_offset(-50, 50 + (#notifications.notifs * 30)); -- origin (dependant on the watermark position rn)
+                    -- ✅ Começa fora da tela (negativo X) para entrar via tween
+                    Position = dim_offset(-200, 50 + (#notifications.notifs * 30));
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(0, 0, 0, 24);
                     BorderSizePixel = 0;
@@ -793,8 +813,15 @@
             notifications.notifs[index] = outline
             
             notifications:refresh_notifs()
-            tween_service:Create(outline, TweenInfo.new(1, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {AnchorPoint = vec2(0, 0)}):Play()
+
+            -- ✅ Tween de entrada: desliza da esquerda até a posição final
+            local target_x = 50
+            local target_y = 50 + (index * 30)
+            tween_service:Create(outline, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {
+                Position = dim_offset(target_x, target_y)
+            }):Play()
             
+            -- ✅ Fade in
             notifications:fade(outline, false)
         
             task.spawn(function()
@@ -802,9 +829,10 @@
                 
                 notifications.notifs[index] = nil
         
+                -- ✅ Fade out animado
                 notifications:fade(outline, true)
         
-                task.wait(3)
+                task.wait(1)
         
                 outline:Destroy() 
             end)
@@ -893,15 +921,6 @@
                 fps = 0
             end
         end)
-        
-        --[[
-        	local pingTimeSec = game.Players.LocalPlayer:GetNetworkPing()
-	local pingTimeMs = pingTimeSec * 1000
-	pingLabel.Text = "Ping: " .. tostring(math.floor(pingTimeMs)) .. "ms"
-
-	local realFPS = workspace:GetRealPhysicsFPS()
-	fpsLabel.Text = "FPS: " .. tostring(math.floor(realFPS))
-        ]]
 
         function library:column(properties)
             self.count += 1
@@ -1147,7 +1166,6 @@
 
                     scale = options.size or 90, 
                     items = options.items or {"1", "2", "3"}, 
-                    -- order = options.order or 1, 
                     visible = options.visible or true,
             
                     option_instances = {}, 
@@ -1650,7 +1668,7 @@
                     name = options.name or "Color", 
                     flag = options.flag or options.name or "Flag",
 
-                    color = options.color or color(1, 1, 1), -- Default to white color if not provided
+                    color = options.color or color(1, 1, 1),
                     alpha = options.alpha and 1 - options.alpha or 0,
                     
                     open = false, 
@@ -1922,8 +1940,6 @@
                             Parent = saturation_button;
                             Color = rgbseq{rgbkey(0, rgb(0, 0, 0)), rgbkey(1, rgb(0, 0, 0))}
                         });
-                        
-                        
                     -- 
                 -- 
                 
@@ -1957,8 +1973,6 @@
                         hue_picker.Position = dim2(0, -1, 1 - h, -1)
                         alpha_picker.Position = dim2(1 - a, -1, 0, -1)
                         saturation_value_picker.Position = dim2(s, -1, 1 - v, -1)
-
-                        --element_alpha.ImageTransparency = 1 - a
 
                         alpha_color.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
                         colorpicker_element_color.BackgroundColor3 = Color
@@ -2278,7 +2292,7 @@
                 --
 
                 -- Functions 
-                    function cfg.modify_mode_color(path) -- ts so frikin tuff 💀
+                    function cfg.modify_mode_color(path)
                         for _, v in cfg.hold_instances do 
                             v.TextColor3 = rgb(170, 170, 170)
                         end
@@ -2349,11 +2363,6 @@
                         local __text = _text and (tostring(_text):gsub("KeyCode.", ""):gsub("UserInputType.", ""))
                         
                         text.Text = " ".. __text .." "
-
-                        -- if keybind_list_text then
-                        --     keybind_list_text.Text = "[ ".. __text  .." ] ".. cfg.name ..":".. string.lower(cfg.mode) .."";
-                        --     keybind_list_text.Visible = cfg.active
-                        -- end
                     end
 
                     function cfg.set_visible(bool)
