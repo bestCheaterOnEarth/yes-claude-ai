@@ -2550,15 +2550,6 @@
                 section:button({
                     name = "Unload Menu",
                     callback = function()
-                        notifications:create_notification({name = "1"})
-                        wait(1)
-                        notifications:create_notification({name = "2"})
-                        wait(1)
-                        notifications:create_notification({name = "3"})
-                        wait(1)
-                        notifications:create_notification({name = "4"})
-                        
-                        task.wait(4)
                         library:unload_menu()
                     end
                 })
