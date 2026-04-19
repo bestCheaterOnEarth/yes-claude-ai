@@ -562,7 +562,7 @@
                 local tab_button_holder = library:create("Frame", {
                     Parent = window_outline;
                     BackgroundTransparency = 0.800000011920929;
-                    Position = dim2(0, 2, 0, 24); -- logo abaixo do título
+                    Position = dim2(0, 2, 0, 24);
                     BorderColor3 = rgb(0, 0, 0);
                     Size = dim2(1, -4, 0, 20);
                     BorderSizePixel = 0;
@@ -2484,6 +2484,8 @@
 
             function library:init_config(window) 
                 local textbox;
+
+                --config
                 local main = window:tab({name = "Configs"})
                 local section = main:column({}):section({name = "Settings", size = 1, default = true})
                 config_holder = section:dropdown({name = "Configs", options = {"Report", "This", "Error", "To", "Finobe"}, callback = function(option) if textbox then textbox.set(option) end end, flag = "config_name_list"}); library:update_config_list()
@@ -2492,8 +2494,9 @@
                 section:button({name = "Load", callback = function() library:load_config(readfile(library.directory .. "/configs/" .. flags["config_name_text"] .. ".cfg"))  library:update_config_list() end})
                 section:button({name = "Delete", callback = function() delfile(library.directory .. "/configs/" .. flags["config_name_text"] .. ".cfg")  library:update_config_list() end})
 
+
+                --color and etc.
                 local section = main:column({}):section({name = "Other", size = 1, default = true})
-                section:keybind({name = "Menu bind", callback = function(bool) window.toggle_menu(bool) end, default = true})
                 section:colorpicker({name = "Gradient 1", callback = function(color)                    
                     library:update_theme("1", color)
 
@@ -2539,6 +2542,37 @@
                         rgbkey(1, themes.preset["3"]),
                     };
                 end, color = themes.preset["3"]})
+
+                local section = main:column({}):section({name = "Ui", size = 1, default = true})
+                section:keybind({name = "Menu bind", callback = function(bool) window.toggle_menu(bool) end, default = true})
+                section:keybind({
+                        name = "Menu bind",
+                        default = true,
+                        callback = function(state)
+                            if library.gui then
+                                library.gui.Enabled = state
+                            end
+                            
+                            notifications:create_notification({
+                                name = state and "Menu Enabled" or "Menu Hidden"
+                            })
+                        end
+                    }) 
+                section:button({
+                    name = "Unload Menu",
+                    callback = function()
+                        notifications:create_notification({name = "1"})
+                        wait(1)
+                        notifications:create_notification({name = "2"})
+                        wait(1)
+                        notifications:create_notification({name = "3"})
+                        wait(1)
+                        notifications:create_notification({name = "4"})
+                        
+                        task.wait(5)
+                        library:unload_menu()
+                    end
+                })
 
                 main:column({})
             end
