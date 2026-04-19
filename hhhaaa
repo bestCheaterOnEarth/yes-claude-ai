@@ -509,33 +509,22 @@
             return ins 
         end
 
-        function library:unload_menu()
+        function library:unload_menu() 
             if library.gui then 
                 library.gui:Destroy()
             end
             
             for index, connection in next, library.connections do 
-                pcall(function() connection:Disconnect() end)
-                library.connections[index] = nil
-            end
-            
-            library.connections = nil
-            
+                connection:Disconnect() 
+                connection = nil 
+            end     
+
             if library.sgui then 
                 library.sgui:Destroy()
-            end
+            end 
             
-            library.flags = nil
-            library.config_flags = nil
-            
-            if library.watermark_outline then
-                library.watermark_outline:Destroy()
-            end
-            
-            task.wait()
-            collectgarbage()
-            
-        end
+            library = nil 
+        end 
     --
     
     -- Library element functions
@@ -602,6 +591,7 @@
 
                 local title_text
                 if cfg.accent_name then
+                    -- accent_name = { first = "Priv", second = "9", color = "#245771" }
                     local first = cfg.accent_name.first or ""
                     local second = cfg.accent_name.second or ""
                     local accent_color = cfg.accent_name.color or "#4499CC"
@@ -638,7 +628,7 @@
                 window_outline.Visible = bool 
             end
 
-            return setmetatable(cfg, {__index = library})
+            return setmetatable(cfg, library)
         end 
 
         function library:tab(properties)
@@ -2554,17 +2544,21 @@
                 end, color = themes.preset["3"]})
 
                 local section = main:column({}):section({name = "Ui", size = 1, default = true})
-                
-                section:keybind({name = "Menu bind", 
-                    callback = function(bool) 
-                        cfg.toggle_menu(bool) 
-                    end, 
-                    default = true
-                })
+
+                section:keybind({name = "Menu bind", callback = function(bool) cfg.toggle_menu(bool) end, default = true})
 
                 section:button({
                     name = "Unload Menu",
                     callback = function()
+                        notifications:create_notification({name = "1"})
+                        wait(1)
+                        notifications:create_notification({name = "2"})
+                        wait(1)
+                        notifications:create_notification({name = "3"})
+                        wait(1)
+                        notifications:create_notification({name = "4"})
+                        
+                        task.wait(4)
                         library:unload_menu()
                     end
                 })
