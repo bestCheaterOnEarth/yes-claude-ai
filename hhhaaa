@@ -509,7 +509,7 @@
             return ins 
         end
 
-        function library:unload_menu() --W deepseek code
+        function library:unload_menu()
             if library.gui then 
                 library.gui:Destroy()
             end
@@ -535,7 +535,6 @@
             task.wait()
             collectgarbage()
             
-            library = nil 
         end
     --
     
@@ -603,7 +602,6 @@
 
                 local title_text
                 if cfg.accent_name then
-                    -- accent_name = { first = "Priv", second = "9", color = "#245771" }
                     local first = cfg.accent_name.first or ""
                     local second = cfg.accent_name.second or ""
                     local accent_color = cfg.accent_name.color or "#4499CC"
@@ -640,7 +638,7 @@
                 window_outline.Visible = bool 
             end
 
-            return setmetatable(cfg, library)
+            return cfg
         end 
 
         function library:tab(properties)
@@ -2559,7 +2557,7 @@
                 
                 section:keybind({name = "Menu bind", 
                     callback = function(bool) 
-                        cfg.toggle_menu(bool) 
+                        window.toggle_menu(bool) 
                     end, 
                     default = true
                 })
