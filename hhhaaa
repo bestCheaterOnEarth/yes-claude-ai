@@ -2556,49 +2556,20 @@
                 end, color = themes.preset["3"]})
 
                 local section = main:column({}):section({name = "Ui", size = 1, default = true})
-                    local menu_visible = true
-                    local menu_fixed = false 
+                
+                section:keybind({name = "Menu bind", 
+                    callback = function(bool) 
+                        cfg.toggle_menu(bool) 
+                    end, 
+                    default = true
+                })
 
-                    section:keybind({
-                        name = "Menu Visibility",
-                        default = false,
-                        callback = function()
-                            if not menu_fixed then
-                                menu_visible = not menu_visible
-                                
-                                if library.gui then
-                                    library.gui.Enabled = menu_visible
-                                end
-                            end
-                        end
-                    })
-
-                    section:button({
-                        name = "Fix Menu (Always Visible)",
-                        callback = function()
-                            menu_fixed = not menu_fixed
-                            
-                            if menu_fixed then
-                                if library.gui then
-                                    library.gui.Enabled = true
-                                    menu_visible = true
-                                end
-                                section.fix_button.Text = "Unfix Menu"
-                            else
-                                if library.gui then
-                                    library.gui.Enabled = menu_visible
-                                end
-                                section.fix_button.Text = "Fix Menu"
-                            end
-                        end
-                    })
-
-                    section:button({
-                        name = "Unload Menu",
-                        callback = function()
-                            library:unload_menu()
-                        end
-                    })
+                section:button({
+                    name = "Unload Menu",
+                    callback = function()
+                        library:unload_menu()
+                    end
+                })
 
                 main:column({})
             end
