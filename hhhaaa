@@ -2599,6 +2599,9 @@
                             library:unload_menu()
                         end
                     })
+
+                main:column({})
+            end
         -- 
     -- 
 -- 
