@@ -638,7 +638,7 @@
                 window_outline.Visible = bool 
             end
 
-            return cfg
+            return setmetatable(cfg, {__index = library})
         end 
 
         function library:tab(properties)
