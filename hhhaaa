@@ -85,9 +85,9 @@
             text = rgb(180, 180, 180),
             text_outline = rgb(0, 0, 0),
             background = rgb(20, 20, 20),
-            ["1"] = hex("#2b2b2b"), 
-            ["2"] = hex("#2b2b2b"),
-            ["3"] = hex("#2b2b2b"),
+            ["1"] = hex("#383737"), 
+            ["2"] = hex("#383737"),
+            ["3"] = hex("#383737"),
         },
 
         utility = {
@@ -223,9 +223,16 @@
                 Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/ProggyClean.ttf")
             })
             
+            local Minecraft = Register_Font("Minecraft", 200, "normal", {
+                Id = "Minecraft.tff",
+                Font = game:HttpGet("https://github.com/markhvh/storage/raw/refs/heads/main/fonts/Minecraftia-Regular.ttf")
+
+            })
+
             fonts = {
                 ["TahomaBold"] = Font.new(ProggyTiny, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
                 ["ProggyClean"] = Font.new(ProggyClean, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+                ["Minecraft"] = Font.new(Minecraft, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
             }
         end
     --
@@ -776,7 +783,7 @@
                 });
 
                 library:create("TextLabel", {
-                    FontFace = fonts["ProggyClean"];
+                    FontFace = fonts["Minecraft"];
                     TextColor3 = rgb(255, 255, 255);
                     BorderColor3 = rgb(0, 0, 0);
                     Text = cfg.name;
@@ -862,7 +869,7 @@
                 });
 
                 local text_title = library:create("TextLabel", {
-                    FontFace = fonts["ProggyClean"];
+                    FontFace = fonts["Minecraft"];
                     TextColor3 = rgb(255, 255, 255);
                     BorderColor3 = rgb(0, 0, 0);
                     Text = cfg.name;
@@ -1052,7 +1059,7 @@
                         });
                         
                         library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -1217,7 +1224,7 @@
                 -- Functions
                     function cfg.render_option(text) 
                         local text = library:create("TextButton", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(170, 170, 170);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = text;
@@ -1317,7 +1324,7 @@
                     });
                     
                     local eeeee = library:create("TextLabel", {
-                        FontFace = fonts["ProggyClean"];
+                        FontFace = fonts["Minecraft"];
                         TextColor3 = rgb(255, 255, 255);
                         RichText = true;
                         BorderColor3 = rgb(0, 0, 0);
@@ -1464,7 +1471,7 @@
                         });
                         
                         local text = library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -1479,7 +1486,7 @@
                         });
                         
                         local title = library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -1541,7 +1548,7 @@
                 -- Functions
                     function cfg.render_option(text) 
                         local title = library:create("TextButton", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             AutoButtonColor = false;
                             TextColor3 = rgb(170, 170, 170);
                             BorderColor3 = rgb(0, 0, 0);
@@ -1697,7 +1704,7 @@
                         });
                         
                         library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -1762,7 +1769,7 @@
                         }); library:apply_theme(textbox_holder, tostring(self.count), "BackgroundColor3")
                         
                         local textbox = library:create("TextBox", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = "";
@@ -2086,7 +2093,7 @@
                     local input = library:create("TextBox", {
                         Parent = frame,
                         Name = "",
-                        FontFace = fonts["ProggyClean"],
+                        FontFace = fonts["Minecraft"],
                         TextTruncate = Enum.TextTruncate.AtEnd,
                         TextSize = 12,
                         Text = "",
@@ -2179,7 +2186,7 @@
                         });
                         
                         local text = library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -2194,7 +2201,7 @@
                         });
                         
                         local title = library:create("TextLabel", {
-                            FontFace = fonts["ProggyClean"];
+                            FontFace = fonts["Minecraft"];
                             TextColor3 = rgb(255, 255, 255);
                             BorderColor3 = rgb(0, 0, 0);
                             Text = cfg.name;
@@ -2255,7 +2262,7 @@
                         
                         for _, v in options do
                             local option = library:create("TextButton", {
-                                FontFace = fonts["ProggyClean"];
+                                FontFace = fonts["Minecraft"];
                                 TextColor3 = rgb(170, 170, 170);
                                 BorderColor3 = rgb(0, 0, 0);
                                 Text = v;
@@ -2451,7 +2458,7 @@
                     }); library:apply_theme(frame_inline, "inline", "BackgroundColor3")
                     
                     local text = library:create("TextLabel", {
-                        FontFace = fonts["ProggyClean"];
+                        FontFace = fonts["Minecraft"];
                         TextColor3 = rgb(255, 255, 255);
                         BorderColor3 = rgb(0, 0, 0);
                         Text = cfg.name;
