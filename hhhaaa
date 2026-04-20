@@ -629,7 +629,11 @@
             --
 
             function cfg.toggle_menu(bool) 
-                window_outline.Visible = bool 
+                if bool ~= nil then
+                    window_outline.Visible = bool
+                else
+                    window_outline.Visible = not window_outline.Visible
+                end
             end
 
             return setmetatable(cfg, library)
@@ -2502,12 +2506,48 @@
 
                 --color and etc.
                 local section = main:column({}):section({name = "Other", size = 1, default = true})
+                local menu_bind_initialized = false
                 section:keybind({
                     name = "Menu bind", 
                     default = false,
-                    callback = function()
-                        menu_visible = not menu_visible
-                        window.toggle_menu(menu_visible)
+                    mode = "Toggle",
+                    callback = function(active)
+                        if not menu_bind_initialized then
+                            menu_bind_initialized = true
+                            return
+                        end
+                        window.toggle_menu()
+                    end
+                })
+
+                section:toggle({
+                    name = "Change the color of toggle",
+                    flag = "toggle_color_enabled",
+                    default = false,
+                    callback = function(bool)
+                    end
+                })
+
+                section:colorpicker({
+                    name = "Toggle color",
+                    flag = "toggle_color_value",
+                    color = themes.preset["1"],
+                    callback = function(clr)
+                        library:update_theme("1", clr)
+                        library:update_theme("2", clr)
+                        library:update_theme("3", clr)
+
+                        library.gradient.Color = rgbseq{
+                            rgbkey(0, clr),
+                            rgbkey(0.5, clr),
+                            rgbkey(1, clr),
+                        }
+
+                        library.watermark_gradient.Color = rgbseq{
+                            rgbkey(0, clr),
+                            rgbkey(0.5, clr),
+                            rgbkey(1, clr),
+                        }
                     end
                 })
 
