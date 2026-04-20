@@ -85,9 +85,9 @@
             text = rgb(180, 180, 180),
             text_outline = rgb(0, 0, 0),
             background = rgb(20, 20, 20),
-            ["1"] = hex("#222121"), 
-            ["2"] = hex("#222121"),
-            ["3"] = hex("#222121"),
+            ["1"] = hex("#222121"), --color 1
+            ["2"] = hex("#222121"), --color 2
+            ["3"] = hex("#222121"), --color 3
         },
 
         utility = {
@@ -512,18 +512,22 @@
         function library:unload_menu() 
             if library.gui then 
                 library.gui:Destroy()
+                library.gui = nil
             end
             
-            for index, connection in next, library.connections do 
-                connection:Disconnect() 
-                connection = nil 
-            end     
+            for _, connection in next, library.connections do 
+                if connection then
+                    connection:Disconnect()
+                end
+            end
+            table.clear(library.connections)
 
             if library.sgui then 
                 library.sgui:Destroy()
+                library.sgui = nil
             end 
             
-            library = nil 
+            getgenv().library = nil
         end 
     --
     
@@ -2484,6 +2488,7 @@
 
             function library:init_config(window) 
                 local textbox;
+                local menu_visible = true
 
                 --config
                 local main = window:tab({name = "Configs"})
@@ -2500,8 +2505,9 @@
                 section:keybind({
                     name = "Menu bind", 
                     default = false,
-                    callback = function() 
-                        cfg.toggle_menu() 
+                    callback = function()
+                        menu_visible = not menu_visible
+                        window.toggle_menu(menu_visible)
                     end
                 })
 
