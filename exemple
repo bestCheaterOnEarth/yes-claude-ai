@@ -1,14 +1,20 @@
--- More advanced docs: https://github.com/0x340/Priv9-UI-Libary
+--sooo if u want more exemples u can see i77hm github.
 local library, notifications = loadstring(game:HttpGet("https://raw.githubusercontent.com/bestCheaterOnEarth/yes-claude-ai/refs/heads/main/hhhaaa"))()
 
-local window = library:window({
-	name = "priv9",
+local win = library:window({
+    name = "priv9", --🤬
+    accent_name = {
+        first = "Onion.", 
+        second = "Rings", 
+        color = "#ffa500"
+    },
+    size = UDim2.new(0, 600, 0, 400)
 })
 
 notifications:create_notification({name = "loading menu..."})
 notifications:create_notification({name = "loading modules..."})
 
-local rage = window:tab({name = "rage"})
+local rage = win:tab({name = "rage"})
 local column = rage:column({})
 local section = column:section({name = "aimbot", auto_fill = false, size = 0.3})
 local section2 = column:section({name = "target selection", auto_fill = false, size = 0.7})
@@ -47,8 +53,8 @@ section:button({name = "Test notification", callback = function()
     notifications:create_notification({name = "NOTIFICATION TESTING"})
 end})
 
-local rage = window:tab({name = "visuals"})
-local rage = window:tab({name = "misc"})
+local rage = win:tab({name = "visuals"})
+local rage = win:tab({name = "misc"})
 
 notifications:create_notification({name = "loaded cheat"})
-library:init_config(window) 
+library:init_config(win)
