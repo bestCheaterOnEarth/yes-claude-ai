@@ -2520,7 +2520,9 @@
                     end
                 })
 
-                section:toggle({
+
+                --ignore that shit
+                --[[section:toggle({
                     name = "Change the color of toggle",
                     flag = "toggle_color_enabled",
                     default = false,
@@ -2549,7 +2551,7 @@
                             rgbkey(1, clr),
                         }
                     end
-                })
+                })]]
 
                 section:colorpicker({name = "Gradient 1", callback = function(color)                    
                     library:update_theme("1", color)
