@@ -86,7 +86,7 @@
             text_outline = rgb(0, 0, 0),
             background = rgb(20, 20, 20),
             ["1"] = hex("#383737"), 
-            ["2"] = hex("#775757"),
+            ["2"] = hex("#9c6c6c"),
             ["3"] = hex("#383737"),
         },
 
@@ -624,8 +624,8 @@
                 });
             --
 
-            function cfg.toggle_menu() 
-                window_outline.Visible = not window_outline.Visible 
+            function cfg.toggle_menu(bool) 
+                window_outline.Visible = bool 
             end
 
             return setmetatable(cfg, library)
