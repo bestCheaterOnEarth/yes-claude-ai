@@ -2497,7 +2497,8 @@
 
                 --color and etc.
                 local section = main:column({}):section({name = "Other", size = 1, default = true})
-                section:keybind({name = "Menu bind", callback = function(bool) window.toggle_menu(bool) end, default = true})
+                section:keybind({name = "Menu bind", callback = function(bool) cfg.toggle_menu(bool) end, default = true})
+
                 section:colorpicker({name = "Gradient 1", callback = function(color)                    
                     library:update_theme("1", color)
 
