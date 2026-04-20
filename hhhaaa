@@ -86,7 +86,7 @@
             text_outline = rgb(0, 0, 0),
             background = rgb(20, 20, 20),
             ["1"] = hex("#383737"), 
-            ["2"] = hex("#383737"),
+            ["2"] = hex("#775757"),
             ["3"] = hex("#383737"),
         },
 
@@ -624,8 +624,8 @@
                 });
             --
 
-            function cfg.toggle_menu(bool) 
-                window_outline.Visible = bool 
+            function cfg.toggle_menu() 
+                window_outline.Visible = not window_outline.Visible 
             end
 
             return setmetatable(cfg, library)
@@ -2497,7 +2497,13 @@
 
                 --color and etc.
                 local section = main:column({}):section({name = "Other", size = 1, default = true})
-                section:keybind({name = "Menu bind", callback = function(bool) cfg.toggle_menu(bool) end, default = true})
+                section:keybind({
+                    name = "Menu bind", 
+                    default = false,
+                    callback = function() 
+                        cfg.toggle_menu() 
+                    end
+                })
 
                 section:colorpicker({name = "Gradient 1", callback = function(color)                    
                     library:update_theme("1", color)
